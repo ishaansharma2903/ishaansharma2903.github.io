@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Ishaan Sharma — Computational Astrophysicist, IIT Kharagpur">
+<title>Ishaan Sharma</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root {
+  --bg:    #04040d;
+  --bg2:   #07071a;
+  --card:  #0b0b1e;
+  --gold:  #c4a45a;
+  --gold2: rgba(196,164,90,0.13);
+  --goldb: rgba(196,164,90,0.28);
+  --text:  #ddd8cc;
+  --t2:    #7a7468;
+  --t3:    #3e3c38;
+  --bdr:   rgba(255,255,255,0.055);
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'EB Garamond',Georgia,serif;
+  font-size:1.125rem;
+  line-height:1.82;
+  overflow-x:hidden;
+}
+
+/* grain */
+body::after{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;
+  opacity:.028;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23g)'/%3E%3C/svg%3E");
+  background-size:300px 300px;
+}
+
+canvas#stars{position:fixed;inset:0;z-index:0;pointer-events:none}
+
+/* ── NAV ── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:500;
+  padding:1.2rem 3.5rem;
+  display:flex;justify-content:space-between;align-items:center;
+  background:linear-gradient(to bottom,rgba(4,4,13,.92) 0%,transparent 100%);
+}
+.nav-name{
+  font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:400;
+  letter-spacing:.12em;color:var(--gold);text-decoration:none;
+  opacity:0;transition:opacity .35s;
+}
+.nav-name.show{opacity:1}
+.nav-links{display:flex;gap:2rem;list-style:none}
+.nav-links a{
+  font-family:'JetBrains Mono',monospace;font-size:.66rem;
+  letter-spacing:.14em;text-transform:uppercase;
+  color:var(--t2);text-decoration:none;transition:color .2s;
+}
+.nav-links a:hover{color:var(--gold)}
+
+/* ── HERO ── */
+#hero{
+  position:relative;z-index:1;
+  min-height:100vh;
+  display:flex;flex-direction:column;justify-content:center;
+  padding:0 4rem 7rem;
+}
+.h-label{
+  font-family:'JetBrains Mono',monospace;font-size:.67rem;
+  letter-spacing:.22em;text-transform:uppercase;color:var(--gold);
+  margin-bottom:1.6rem;
+  opacity:0;animation:fadeUp .8s .15s forwards;
+}
+.h-name{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(3.8rem,8.5vw,7.5rem);font-weight:300;
+  line-height:.96;letter-spacing:-.01em;color:var(--text);
+  margin-bottom:1.5rem;
+  opacity:0;animation:fadeUp .9s .35s forwards;
+}
+.h-name em{font-style:italic;color:rgba(221,216,204,.38)}
+.h-desc{
+  font-size:1.15rem;color:var(--t2);
+  max-width:560px;line-height:1.85;margin-bottom:2.6rem;
+  opacity:0;animation:fadeUp .9s .55s forwards;
+}
+.h-links{
+  display:flex;flex-wrap:wrap;gap:1.6rem;
+  opacity:0;animation:fadeUp .9s .75s forwards;
+}
+.h-link{
+  font-family:'JetBrains Mono',monospace;font-size:.7rem;
+  letter-spacing:.06em;color:var(--t2);text-decoration:none;
+  border-bottom:1px solid var(--t3);padding-bottom:2px;
+  display:flex;align-items:center;gap:7px;
+  transition:color .2s,border-color .2s;
+}
+.h-link:hover{color:var(--gold);border-color:var(--gold)}
+.h-scroll{
+  position:absolute;bottom:2.5rem;left:4rem;
+  display:flex;align-items:center;gap:10px;
+  opacity:0;animation:fadeIn 1s 1.4s forwards;
+}
+.h-scroll-line{
+  width:40px;height:1px;
+  background:linear-gradient(to right,var(--gold),transparent);
+  animation:linePulse 2.2s ease-in-out infinite;
+}
+.h-scroll-lbl{
+  font-family:'JetBrains Mono',monospace;font-size:.58rem;
+  letter-spacing:.18em;text-transform:uppercase;color:var(--t3);
+}
+
+/* ── SECTION SHELL ── */
+.sec{position:relative;z-index:1;max-width:940px;margin:0 auto;padding:5.5rem 2rem}
+.sec-alt{background:var(--bg2)}
+.sec-alt > .inner{max-width:940px;margin:0 auto;padding:5.5rem 2rem}
+
+.s-label{
+  font-family:'JetBrains Mono',monospace;font-size:.63rem;
+  letter-spacing:.25em;text-transform:uppercase;color:var(--gold);
+  margin-bottom:.7rem;
+}
+.s-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(1.9rem,4vw,2.8rem);font-weight:400;
+  line-height:1.12;color:var(--text);margin-bottom:2.4rem;
+}
+.s-rule{width:44px;height:1px;background:var(--gold);opacity:.45;margin-bottom:2.4rem}
+
+/* ── RESEARCH INTERESTS ── */
+.interests p{font-size:1.14rem;line-height:1.9;color:var(--text);max-width:730px}
+.kw{color:var(--gold);font-style:italic}
+
+/* ── MANUSCRIPTS ── */
+.ms{
+  border-left:1px solid var(--goldb);
+  padding:1.4rem 1.8rem;margin-bottom:1.4rem;
+  background:var(--card);border-radius:0 5px 5px 0;
+  transition:border-color .3s,background .3s;
+}
+.ms:hover{border-color:var(--gold);background:#0f0f22}
+.ms-tag{
+  font-family:'JetBrains Mono',monospace;font-size:.6rem;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:.45rem;
+}
+.ms-title{
+  font-family:'Cormorant Garamond',serif;font-size:1.22rem;font-weight:500;
+  color:var(--text);line-height:1.38;margin-bottom:.35rem;
+}
+.ms-authors{font-size:.9rem;color:var(--t2);font-style:italic;margin-bottom:.7rem}
+.ms-abstract{font-size:.94rem;color:var(--t2);line-height:1.72}
+
+/* ── PROJECTS ── */
+.proj-grid{display:flex;flex-direction:column;gap:1.1rem}
+
+.proj{
+  background:var(--card);border:1px solid var(--bdr);
+  border-radius:6px;overflow:hidden;
+  transition:border-color .3s;cursor:pointer;
+}
+.proj:hover{border-color:var(--goldb)}
+
+.proj-head{
+  padding:1.45rem 1.7rem;
+  display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;
+}
+.proj-meta{flex:1}
+.proj-tag{
+  display:inline-block;
+  font-family:'JetBrains Mono',monospace;font-size:.57rem;
+  letter-spacing:.11em;text-transform:uppercase;color:var(--gold);
+  border:1px solid rgba(196,164,90,.28);padding:2px 8px;border-radius:2px;
+  margin-bottom:.55rem;
+}
+.proj-title{
+  font-family:'Cormorant Garamond',serif;font-size:1.22rem;font-weight:500;
+  color:var(--text);line-height:1.3;margin-bottom:.28rem;
+}
+.proj-sup{font-size:.84rem;color:var(--t2);font-style:italic}
+.proj-right{display:flex;flex-direction:column;align-items:flex-end;gap:5px;flex-shrink:0}
+.proj-date{font-family:'JetBrains Mono',monospace;font-size:.63rem;color:var(--t3);white-space:nowrap}
+.proj-chevron{color:var(--t3);font-size:.7rem;transition:transform .32s,color .2s}
+.proj.open .proj-chevron{transform:rotate(180deg);color:var(--gold)}
+
+.proj-body{max-height:0;overflow:hidden;transition:max-height .42s ease}
+.proj.open .proj-body{max-height:640px}
+
+.proj-ul{
+  padding:1.2rem 1.7rem 1.5rem;
+  border-top:1px solid var(--bdr);list-style:none;
+}
+.proj-ul li{
+  font-size:.97rem;color:var(--t2);line-height:1.72;
+  padding:.32rem 0 .32rem 1.3rem;position:relative;
+}
+.proj-ul li::before{content:'—';position:absolute;left:0;color:var(--gold);opacity:.45}
+
+/* ── ACHIEVEMENTS ── */
+.ach-list{display:flex;flex-direction:column}
+.ach{
+  display:grid;grid-template-columns:110px 1fr;gap:1.4rem;
+  padding:1.2rem 0;border-bottom:1px solid var(--bdr);align-items:baseline;
+}
+.ach-date{font-family:'JetBrains Mono',monospace;font-size:.62rem;letter-spacing:.04em;color:var(--t3);text-align:right;padding-top:.15rem}
+.ach-title{font-size:1rem;color:var(--text);font-weight:400;line-height:1.5}
+.ach-title strong{color:var(--gold);font-weight:400}
+.ach-sub{font-size:.86rem;color:var(--t2);font-style:italic;margin-top:.15rem}
+
+/* ── SKILLS ── */
+.skills-g{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.8rem}
+.sk-label{
+  font-family:'JetBrains Mono',monospace;font-size:.62rem;
+  letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:.7rem;
+}
+.sk-tags{display:flex;flex-wrap:wrap;gap:.38rem}
+.sk-tag{
+  font-family:'JetBrains Mono',monospace;font-size:.67rem;
+  color:var(--t2);background:var(--card);border:1px solid var(--bdr);
+  padding:3px 10px;border-radius:2px;
+  transition:border-color .2s,color .2s;
+}
+.sk-tag:hover{border-color:var(--goldb);color:var(--text)}
+
+/* ── FOOTER ── */
+footer{
+  position:relative;z-index:1;text-align:center;
+  padding:3.5rem 2rem 5rem;border-top:1px solid var(--bdr);
+}
+.ft-name{
+  font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:300;
+  color:var(--t2);margin-bottom:.5rem;
+}
+.ft-email{
+  font-family:'JetBrains Mono',monospace;font-size:.7rem;
+  color:var(--gold);text-decoration:none;letter-spacing:.05em;
+}
+.ft-loc{font-size:.82rem;color:var(--t3);margin-top:1.8rem}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes linePulse{0%,100%{opacity:.25;transform:scaleX(.8)}50%{opacity:1;transform:scaleX(1)}}
+
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease}
+.reveal.vis{opacity:1;transform:none}
+.ach{opacity:0;transform:translateY(10px);transition:opacity .5s,transform .5s}
+.ach.vis{opacity:1;transform:none}
+
+/* ── RESPONSIVE ── */
+@media(max-width:768px){
+  nav{padding:1rem 1.5rem}
+  .nav-links{display:none}
+  #hero{padding:0 1.5rem 6rem}
+  .sec{padding:3.5rem 1.5rem}
+  .sec-alt > .inner{padding:3.5rem 1.5rem}
+  .ach{grid-template-columns:76px 1fr;gap:1rem}
+  .h-scroll{left:1.5rem}
+}
+</style>
+</head>
+<body>
+
+<canvas id="stars"></canvas>
+
+<nav>
+  <a href="#hero" class="nav-name" id="nav-name">Ishaan Sharma</a>
+  <ul class="nav-links">
+    <li><a href="#research">Research</a></li>
+    <li><a href="#manuscripts">Papers</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#achievements">Achievements</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- ── HERO ── -->
+<section id="hero">
+  <p class="h-label">IIT Kharagpur &nbsp;·&nbsp; Aerospace Engineering &nbsp;·&nbsp; Class of 2026</p>
+  <h1 class="h-name">Ishaan<br><em>Sharma</em></h1>
+  <p class="h-desc">Computational astrophysicist working on compact object binaries, accretion dynamics, gravitational wave signatures, and multi-messenger astronomy.</p>
+  <div class="h-links">
+    <a href="mailto:ishaan_sharma2903@kgpian.iitkgp.ac.in" class="h-link">
+      <i class="fa-regular fa-envelope" aria-hidden="true"></i> ishaan_sharma2903@kgpian.iitkgp.ac.in
+    </a>
+    <a href="https://github.com/ishaansharma2903" target="_blank" rel="noopener" class="h-link">
+      <i class="fa-brands fa-github" aria-hidden="true"></i> github.com/ishaansharma2903
+    </a>
+    <a href="Ishaan_Sharma_CV.pdf" class="h-link">
+      <i class="fa-regular fa-file-lines" aria-hidden="true"></i> Curriculum Vitae
+    </a>
+  </div>
+  <div class="h-scroll">
+    <div class="h-scroll-line"></div>
+    <span class="h-scroll-lbl">Scroll</span>
+  </div>
+</section>
+
+<!-- ── RESEARCH INTERESTS ── -->
+<section id="research" class="sec">
+  <p class="s-label reveal">Research Interests</p>
+  <h2 class="s-title reveal">The physics of<br>the violent universe</h2>
+  <div class="s-rule reveal"></div>
+  <div class="interests reveal">
+    <p>My work centres on <span class="kw">compact objects</span> and their most extreme interactions — binary mergers, tidal disruption, and accretion dynamics in strong-field gravity. I work at the intersection of <span class="kw">numerical relativity</span> and <span class="kw">computational astrophysics</span>, building simulation pipelines and analytic frameworks to extract physical observables from complex dynamical systems.</p>
+    <br>
+    <p>A central thread connects microscopic processes — nonlinear fluid instabilities, shock dynamics, eigenmode softening — to macroscopic signals accessible through <span class="kw">gravitational wave</span> and electromagnetic observations. I am broadly interested in how the extreme physics of compact objects can be used as laboratories for fundamental questions in gravity, dense matter, and cosmology.</p>
+  </div>
+</section>
+
+<!-- ── MANUSCRIPTS ── -->
+<div class="sec-alt" id="manuscripts">
+<div class="inner">
+  <p class="s-label reveal">Writing</p>
+  <h2 class="s-title reveal">Manuscripts<br>in Preparation</h2>
+  <div class="s-rule reveal"></div>
+
+  <div class="ms reveal">
+    <p class="ms-tag">In Preparation &nbsp;·&nbsp; 2026</p>
+    <p class="ms-title">Dynamical Stability and Tidal Disruption Conditions in Black Hole–Neutron Star Binaries via the Relativistic Affine Model</p>
+    <p class="ms-authors">Sharma, I. &amp; Kar, S.</p>
+    <p class="ms-abstract">A comprehensive stability analysis of neutron stars in BHNS binaries within the relativistic affine framework, incorporating realistic equations of state to derive tidal disruption criteria and characterize eigenmode structure across mass-ratio and compactness parameter space.</p>
+  </div>
+
+  <div class="ms reveal">
+    <p class="ms-tag">In Preparation &nbsp;·&nbsp; 2026</p>
+    <p class="ms-title">Quadrupolar Spectral Signatures of Spiral Shock Instabilities in Relativistic Accretion Flows</p>
+    <p class="ms-authors">Sharma, I.</p>
+    <p class="ms-abstract">Time-dependent GRHD simulations of non-axisymmetric accretion flows in Schwarzschild spacetime, investigating nonlinear spiral shock dynamics, harmonic mode coupling, and quadrupolar gravitational wave spectral signatures via relativistic quadrupole extraction from Athena++ simulation data.</p>
+  </div>
+</div>
+</div>
+
+<!-- ── PROJECTS ── -->
+<section id="projects" class="sec">
+  <p class="s-label reveal">Work</p>
+  <h2 class="s-title reveal">Research Projects</h2>
+  <div class="s-rule reveal"></div>
+  <div class="proj-grid reveal">
+
+    <div class="proj" onclick="toggleProj(this)">
+      <div class="proj-head">
+        <div class="proj-meta">
+          <span class="proj-tag">Bachelor's Thesis</span>
+          <p class="proj-title">Tidal Effects in Black Hole–Neutron Star Mergers</p>
+          <p class="proj-sup">Supervisor: Prof. Sayan Kar, IIT Kharagpur</p>
+        </div>
+        <div class="proj-right">
+          <span class="proj-date">Aug 2025 – May 2026</span>
+          <i class="fa-solid fa-chevron-down proj-chevron" aria-hidden="true"></i>
+        </div>
+      </div>
+      <div class="proj-body">
+        <ul class="proj-ul">
+          <li>Constructed quasiequilibrium sequences for close BH–NS binaries using the Relativistic Affine Model (RAM), characterizing hydrodynamic equilibrium of ellipsoidal stars with TOV potential in Schwarzschild spacetime.</li>
+          <li>Performed linear stability analysis and studied stellar eigenmode evolution for APR, SLy, and DD2 equations of state, investigating the relationship between eigenmode softening, dynamical stability, and neutron-star tidal disruption.</li>
+          <li>Computed tidal disruption radii and post-merger remnant disk mass fractions across mass-ratio and compactness parameter space using fluid energy and four-velocity criteria at the onset of disruption.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="proj" onclick="toggleProj(this)">
+      <div class="proj-head">
+        <div class="proj-meta">
+          <span class="proj-tag">Independent Research</span>
+          <p class="proj-title">Spectral GW Signatures from Spiral Shock Instabilities in Accretion Flows</p>
+          <p class="proj-sup">Independent Project</p>
+        </div>
+        <div class="proj-right">
+          <span class="proj-date">May 2025 – May 2026</span>
+          <i class="fa-solid fa-chevron-down proj-chevron" aria-hidden="true"></i>
+        </div>
+      </div>
+      <div class="proj-body">
+        <ul class="proj-ul">
+          <li>Simulated low-angular-momentum shocked Schwarzschild BH accretion flows using Athena++ (2D equatorial GRHD, HRSC, Kerr–Schild coordinates) on logarithmic grids up to 768×384 across sub-Keplerian angular momenta.</li>
+          <li>Triggered and analyzed non-axisymmetric spiral standing shock instabilities via Fourier decomposition, tracking nonlinear growth of m=1 spiral modes, harmonic generation, saturation, and mode-coupling-driven m=2 structure.</li>
+          <li>Built a Python pipeline using NumPy, SciPy, h5py, and FFT-based spectral differentiation to extract relativistic quadrupole spectra, compute quadrupolar GW signatures, and correlate frequencies with spiral shock rotation dynamics.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="proj" onclick="toggleProj(this)">
+      <div class="proj-head">
+        <div class="proj-meta">
+          <span class="proj-tag">Research Project</span>
+          <p class="proj-title">Nonlinear Evolution of Primordial Non-Gaussianities in the Matter Bispectrum</p>
+          <p class="proj-sup">Supervisor: Prof. Somnath Bharadwaj, IIT Kharagpur</p>
+        </div>
+        <div class="proj-right">
+          <span class="proj-date">Mar – May 2025</span>
+          <i class="fa-solid fa-chevron-down proj-chevron" aria-hidden="true"></i>
+        </div>
+      </div>
+      <div class="proj-body">
+        <ul class="proj-ul">
+          <li>Developed a custom parallelized Particle-Mesh N-body solver using pyFFTW and Numba to simulate nonlinear gravitational clustering, structure formation, and Fourier-space mode coupling in cosmological matter distributions.</li>
+          <li>Generated Gaussian and local-type primordial non-Gaussian (f<sub>NL</sub>-parameterized) initial conditions using CLASS transfer functions and 2LPT displacement fields to study inflationary signatures in large-scale structure.</li>
+          <li>Computed the reduced matter bispectrum across equilateral, squeezed, and folded configurations using shell-filtered Fourier estimators, quantifying survival of primordial non-Gaussian signatures against nonlinear collapse.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="proj" onclick="toggleProj(this)">
+      <div class="proj-head">
+        <div class="proj-meta">
+          <span class="proj-tag">Research Project</span>
+          <p class="proj-title">Implementation of CIPSI in PySCF for Electron Correlation</p>
+          <p class="proj-sup">Supervisor: Prof. Sabyasachi Mishra, IIT Kharagpur</p>
+        </div>
+        <div class="proj-right">
+          <span class="proj-date">Mar – Apr 2026</span>
+          <i class="fa-solid fa-chevron-down proj-chevron" aria-hidden="true"></i>
+        </div>
+      </div>
+      <div class="proj-body">
+        <ul class="proj-ul">
+          <li>Motivated by parallels between many-body electron correlation and dense matter in neutron star interiors, implemented the CIPSI algorithm in PySCF via iterative subspace expansion with second-order Epstein–Nesbet perturbation weights, enabling adaptive determinant selection and PT2 energy corrections.</li>
+          <li>Characterized the onset of strong static correlation near the dissociation limit by tracking the leading determinant weight and natural orbital occupation; benchmarked PT2-corrected energies against FCI across bond dissociation curves.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="proj" onclick="toggleProj(this)">
+      <div class="proj-head">
+        <div class="proj-meta">
+          <span class="proj-tag">Research Internship</span>
+          <p class="proj-title">Robust Aerodynamic Shape Optimization</p>
+          <p class="proj-sup">Supervisor: Prof. Aravind Balan, IISc Bengaluru</p>
+        </div>
+        <div class="proj-right">
+          <span class="proj-date">May – Jul 2024</span>
+          <i class="fa-solid fa-chevron-down proj-chevron" aria-hidden="true"></i>
+        </div>
+      </div>
+      <div class="proj-body">
+        <ul class="proj-ul">
+          <li>Validated a generalized polynomial chaos (gPC) uncertainty framework within an in-house Hybridizable Discontinuous Galerkin CFD solver, demonstrating consistent robustness gains over the deterministic optimum across canonical airfoil geometries.</li>
+          <li>Modeled parametric and turbulence-modeling uncertainties via gPC, computing statistical moments of lift and drag without Monte Carlo sampling; quantified the mean-performance vs. robustness trade-off on canonical airfoils.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="proj" onclick="toggleProj(this)">
+      <div class="proj-head">
+        <div class="proj-meta">
+          <span class="proj-tag">Lab Project</span>
+          <p class="proj-title">Design of a Gel Fuel Injector</p>
+          <p class="proj-sup">Supervisor: Prof. Srinibas Karmakar, IIT Kharagpur</p>
+        </div>
+        <div class="proj-right">
+          <span class="proj-date">Aug – Nov 2024</span>
+          <i class="fa-solid fa-chevron-down proj-chevron" aria-hidden="true"></i>
+        </div>
+      </div>
+      <div class="proj-body">
+        <ul class="proj-ul">
+          <li>Demonstrated a threefold reduction in average droplet diameter vs. a conventional injector via DPM-based ANSYS Fluent simulations for HPMC gel, validating a novel design exploiting the shear-thinning property of gel fuels.</li>
+          <li>Designed the injector to mitigate ligament formation and blockage challenges common in gel fuel atomization, informed by a comprehensive survey of gel fuel rheology and atomization techniques.</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── ACHIEVEMENTS ── -->
+<div class="sec-alt" id="achievements">
+<div class="inner">
+  <p class="s-label reveal">Honours</p>
+  <h2 class="s-title reveal">Academic Achievements</h2>
+  <div class="s-rule reveal"></div>
+  <div class="ach-list">
+    <div class="ach"><span class="ach-date">Nov 2025</span><div><p class="ach-title"><strong>970/990 · 92nd percentile</strong> — GRE Physics</p><p class="ach-sub">100% Electromagnetism · 94% Quantum Mechanics · 93% Classical Mechanics &nbsp;·&nbsp; ETS</p></div></div>
+    <div class="ach"><span class="ach-date">Jul 2026 (exp.)</span><div><p class="ach-title"><strong>Institute Silver Medal</strong> — IIT Kharagpur</p><p class="ach-sub">Highest CGPA in the B.Tech Aerospace Engineering programme</p></div></div>
+    <div class="ach"><span class="ach-date">Jul 2025</span><div><p class="ach-title"><strong>JC Ghosh Memorial Endowment Award</strong> — IIT Kharagpur</p><p class="ach-sub">Highest CGPA in Aerospace Engineering after the 6th semester &nbsp;·&nbsp; CGPA 8.88 · Class Rank 1</p></div></div>
+    <div class="ach"><span class="ach-date">Mar 2025</span><div><p class="ach-title"><strong>All India Rank 223 · Top 1%</strong> — GATE Physics 2025</p><p class="ach-sub">IIT Roorkee</p></div></div>
+    <div class="ach"><span class="ach-date">May 2022</span><div><p class="ach-title"><strong>State Topper, Madhya Pradesh</strong> — IOQA 2022</p><p class="ach-sub">Certificate of Merit &nbsp;·&nbsp; HBCSE–TIFR</p></div></div>
+    <div class="ach"><span class="ach-date">Mar 2021</span><div><p class="ach-title"><strong>KVPY Fellow</strong> — IISc Bengaluru</p><p class="ach-sub">Department of Science and Technology, Government of India</p></div></div>
+    <div class="ach"><span class="ach-date">Jul 2021</span><div><p class="ach-title"><strong>NTSE Scholar</strong> — NCERT</p><p class="ach-sub">National Talent Search Scholarship</p></div></div>
+    <div class="ach"><span class="ach-date">Mar 2020</span><div><p class="ach-title"><strong>Top 40 in India</strong> — INJSO 2020</p><p class="ach-sub">Qualified for OCSC selection camp &nbsp;·&nbsp; HBCSE–TIFR</p></div></div>
+  </div>
+</div>
+</div>
+
+<!-- ── SKILLS ── -->
+<section id="skills" class="sec">
+  <p class="s-label reveal">Toolkit</p>
+  <h2 class="s-title reveal">Technical Skills</h2>
+  <div class="s-rule reveal"></div>
+  <div class="skills-g reveal">
+    <div>
+      <p class="sk-label">Simulation</p>
+      <div class="sk-tags">
+        <span class="sk-tag">Athena++</span><span class="sk-tag">AthenaK</span>
+        <span class="sk-tag">MUSIC</span><span class="sk-tag">CLASS</span>
+        <span class="sk-tag">ANSYS Fluent</span><span class="sk-tag">PySCF</span>
+      </div>
+    </div>
+    <div>
+      <p class="sk-label">Analysis</p>
+      <div class="sk-tags">
+        <span class="sk-tag">pyFFTW</span><span class="sk-tag">Numba</span>
+        <span class="sk-tag">nbodykit</span><span class="sk-tag">yt</span>
+        <span class="sk-tag">DTFE</span><span class="sk-tag">Astropy</span>
+        <span class="sk-tag">h5py</span><span class="sk-tag">SciPy</span>
+      </div>
+    </div>
+    <div>
+      <p class="sk-label">Languages</p>
+      <div class="sk-tags">
+        <span class="sk-tag">Python</span><span class="sk-tag">C</span>
+        <span class="sk-tag">C++</span><span class="sk-tag">Fortran</span>
+        <span class="sk-tag">LaTeX</span><span class="sk-tag">SQL</span>
+      </div>
+    </div>
+    <div>
+      <p class="sk-label">HPC &amp; Math</p>
+      <div class="sk-tags">
+        <span class="sk-tag">MPI</span><span class="sk-tag">OpenMP</span>
+        <span class="sk-tag">CUDA</span><span class="sk-tag">Mathematica</span>
+        <span class="sk-tag">SageMath</span><span class="sk-tag">MATLAB</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER / CONTACT ── -->
+<footer id="contact">
+  <p class="ft-name">Ishaan Sharma</p>
+  <a class="ft-email" href="mailto:ishaan_sharma2903@kgpian.iitkgp.ac.in">
+    ishaan_sharma2903@kgpian.iitkgp.ac.in
+  </a>
+  <p class="ft-loc">IIT Kharagpur &nbsp;·&nbsp; Bhopal, Madhya Pradesh, India &nbsp;·&nbsp; US Citizen</p>
+</footer>
+
+<script>
+// ── STAR FIELD ──
+(function(){
+  const c=document.getElementById('stars'),ctx=c.getContext('2d');
+  let S=[];
+  function resize(){c.width=innerWidth;c.height=innerHeight}
+  function init(){
+    S=[];
+    const n=Math.floor(c.width*c.height/5500);
+    for(let i=0;i<n;i++)S.push({
+      x:Math.random()*c.width,y:Math.random()*c.height,
+      r:Math.random()*1.1+.15,
+      a:Math.random()*.55+.08,
+      sp:Math.random()*.007+.002,
+      ph:Math.random()*Math.PI*2
+    });
+  }
+  let t=0;
+  function draw(){
+    ctx.clearRect(0,0,c.width,c.height);t+=.012;
+    S.forEach(s=>{
+      const a=s.a*(.55+.45*Math.sin(t*s.sp*55+s.ph));
+      ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(210,202,185,${a})`;ctx.fill();
+    });
+    requestAnimationFrame(draw);
+  }
+  resize();init();draw();
+  addEventListener('resize',()=>{resize();init();});
+})();
+
+// ── NAV NAME ──
+(function(){
+  const hero=document.getElementById('hero'),nn=document.getElementById('nav-name');
+  new IntersectionObserver(e=>nn.classList.toggle('show',!e[0].isIntersecting),{threshold:.25}).observe(hero);
+})();
+
+// ── SCROLL REVEAL ──
+(function(){
+  const obs=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(!e.isIntersecting)return;
+      if(e.target.classList.contains('ach')){
+        const items=document.querySelectorAll('.ach');
+        let idx=0;items.forEach((el,i)=>{if(el===e.target)idx=i%8;});
+        setTimeout(()=>e.target.classList.add('vis'),idx*65);
+      } else {
+        e.target.classList.add('vis');
+      }
+      obs.unobserve(e.target);
+    });
+  },{threshold:.1});
+  document.querySelectorAll('.reveal,.ach').forEach(el=>obs.observe(el));
+})();
+
+// ── PROJECT TOGGLE ──
+function toggleProj(card){
+  const was=card.classList.contains('open');
+  document.querySelectorAll('.proj.open').forEach(c=>c.classList.remove('open'));
+  if(!was)card.classList.add('open');
+}
+</script>
+</body>
+</html>
