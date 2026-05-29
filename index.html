@@ -160,13 +160,53 @@ nav{
 
 
 @media(max-width:900px){
-  #hero{flex-direction:column;align-items:flex-start;gap:3rem}
+  #hero{flex-direction:column;align-items:flex-start;gap:2.5rem;padding:7rem 2.5rem 6rem}
   .h-right{align-self:flex-start}
   .h-photo{width:160px;height:160px}
+  .h-scroll{left:2.5rem}
 }
-@media(max-width:768px){
-  #hero{padding:5rem 1.5rem 6rem;flex-direction:column;align-items:flex-start;gap:2.5rem}
-  .h-photo{width:130px;height:130px}
+
+@media(max-width:600px){
+  /* nav */
+  nav{padding:.9rem 1.2rem}
+  .nav-links{display:none}
+
+  /* hero */
+  #hero{padding:6rem 1.2rem 5rem;gap:2rem}
+  .h-label{font-size:.58rem;letter-spacing:.14em;margin-bottom:1.2rem}
+  .h-name{font-size:clamp(2.8rem,14vw,4.5rem);margin-bottom:1.2rem}
+  .h-desc{font-size:1rem;margin-bottom:2rem}
+  .h-links{gap:1rem}
+  .h-link{font-size:.65rem}
+  .h-photo{width:110px;height:110px}
+  .h-scroll{left:1.2rem;bottom:1.8rem}
+
+  /* sections */
+  .sec{padding:3rem 1.2rem}
+  .sec-alt > .inner{padding:3rem 1.2rem}
+  .s-title{font-size:clamp(1.6rem,7vw,2.2rem);margin-bottom:1.6rem}
+  .s-rule{margin-bottom:1.6rem}
+
+  /* manuscripts */
+  .ms{padding:1.1rem 1.1rem}
+  .ms-title{font-size:1.08rem}
+
+  /* projects */
+  .proj-head{padding:1.1rem 1rem;gap:.6rem}
+  .proj-title{font-size:1.05rem}
+  .proj-right{display:none}
+  .proj-ul{padding:.9rem 1rem 1.1rem}
+  .proj-ul li{font-size:.92rem}
+
+  /* achievements */
+  .ach{grid-template-columns:1fr;gap:.25rem;padding:.9rem 0}
+  .ach-date{text-align:left}
+
+  /* skills */
+  .skills-g{grid-template-columns:1fr 1fr;gap:1.2rem}
+
+  /* footer */
+  footer{padding:2.5rem 1.2rem 3.5rem}
 }
 
 /* ── SECTION SHELL ── */
