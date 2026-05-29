@@ -119,6 +119,56 @@ nav{
   letter-spacing:.18em;text-transform:uppercase;color:var(--t3);
 }
 
+/* hero two-col layout */
+#hero{flex-direction:row;align-items:center;gap:5rem}
+.h-left{flex:1;display:flex;flex-direction:column;justify-content:center}
+.h-right{flex-shrink:0;opacity:0;animation:fadeIn 1.1s .9s forwards}
+
+/* photo frame — circular */
+.h-photo{width:220px;height:220px;position:relative}
+.h-photo-frame{
+  width:100%;height:100%;border-radius:50%;overflow:hidden;
+  position:relative;background:var(--card);
+  box-shadow:0 0 0 1px var(--goldb),0 0 0 6px rgba(196,164,90,.07),0 0 32px rgba(196,164,90,.08);
+  transition:box-shadow .4s;
+}
+.h-photo-frame:hover{
+  box-shadow:0 0 0 1px rgba(196,164,90,.6),0 0 0 6px rgba(196,164,90,.1),0 0 40px rgba(196,164,90,.15);
+}
+.h-photo-frame img{
+  width:100%;height:100%;object-fit:cover;object-position:top center;display:block;
+  filter:grayscale(15%) brightness(.93);transition:filter .4s;
+}
+.h-photo-frame:hover img{filter:grayscale(0%) brightness(1)}
+
+/* placeholder shown when no real photo */
+.h-photo-placeholder{
+  width:100%;height:100%;border-radius:50%;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:.7rem;
+  border:1px dashed rgba(196,164,90,.22);
+  background:var(--card);cursor:default;
+  box-shadow:0 0 0 6px rgba(196,164,90,.04);
+}
+.h-photo-placeholder i{font-size:2rem;color:var(--t3)}
+.h-photo-placeholder span{
+  font-family:'JetBrains Mono',monospace;font-size:.58rem;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--t3);
+  text-align:center;line-height:1.6;padding:0 1rem;
+}
+
+
+
+@media(max-width:900px){
+  #hero{flex-direction:column;align-items:flex-start;gap:3rem}
+  .h-right{align-self:flex-start}
+  .h-photo{width:160px;height:160px}
+}
+@media(max-width:768px){
+  #hero{padding:5rem 1.5rem 6rem}
+  .h-right{display:none}
+}
+
 /* ── SECTION SHELL ── */
 .sec{position:relative;z-index:1;max-width:940px;margin:0 auto;padding:5.5rem 2rem}
 .sec-alt{background:var(--bg2)}
@@ -284,20 +334,30 @@ footer{
 
 <!-- ── HERO ── -->
 <section id="hero">
-  <p class="h-label">IIT Kharagpur &nbsp;·&nbsp; Aerospace Engineering &nbsp;·&nbsp; Class of 2026</p>
-  <h1 class="h-name">Ishaan<br><em>Sharma</em></h1>
-  <p class="h-desc">Computational astrophysicist working on compact object binaries, accretion dynamics, gravitational wave signatures, and multi-messenger astronomy.</p>
-  <div class="h-links">
-    <a href="mailto:ishaan_sharma2903@kgpian.iitkgp.ac.in" class="h-link">
-      <i class="fa-regular fa-envelope" aria-hidden="true"></i> ishaan_sharma2903@kgpian.iitkgp.ac.in
-    </a>
-    <a href="https://github.com/ishaansharma2903" target="_blank" rel="noopener" class="h-link">
-      <i class="fa-brands fa-github" aria-hidden="true"></i> github.com/ishaansharma2903
-    </a>
-    <a href="Ishaan_Sharma_CV.pdf" class="h-link">
-      <i class="fa-regular fa-file-lines" aria-hidden="true"></i> Curriculum Vitae
-    </a>
+  <div class="h-left">
+    <p class="h-label">IIT Kharagpur &nbsp;·&nbsp; Aerospace Engineering &nbsp;·&nbsp; Class of 2026</p>
+    <h1 class="h-name">Ishaan<br><em>Sharma</em></h1>
+    <p class="h-desc">Computational astrophysicist working on compact object binaries, accretion dynamics, gravitational wave signatures, and multi-messenger astronomy.</p>
+    <div class="h-links">
+      <a href="mailto:ishaan_sharma2903@kgpian.iitkgp.ac.in" class="h-link">
+        <i class="fa-regular fa-envelope" aria-hidden="true"></i> ishaan_sharma2903@kgpian.iitkgp.ac.in
+      </a>
+      <a href="https://github.com/ishaansharma2903" target="_blank" rel="noopener" class="h-link">
+        <i class="fa-brands fa-github" aria-hidden="true"></i> github.com/ishaansharma2903
+      </a>
+      <a href="assets/Ishaan_Sharma_CV.pdf" class="h-link">
+        <i class="fa-regular fa-file-lines" aria-hidden="true"></i> Curriculum Vitae
+      </a>
+    </div>
   </div>
+
+  <div class="h-right">
+    <div class="h-photo">
+           <div class="h-photo-frame"><img src="assets/photo.jpg" alt="Ishaan Sharma"></div>
+      </div>
+    </div>
+  </div>
+
   <div class="h-scroll">
     <div class="h-scroll-line"></div>
     <span class="h-scroll-lbl">Scroll</span>
